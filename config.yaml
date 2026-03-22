@@ -1,0 +1,95 @@
+# ============================================================
+# Iris 配置文件
+# ============================================================
+
+# --- 服务器配置 ---
+server:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 1
+  log_level: "info"
+
+# --- LLM 配置 ---
+llm:
+  provider: "anthropic"
+  model: "claude-sonnet-4-20250514"
+  api_key: "${ANTHROPIC_API_KEY}"
+  temperature: 0.1
+  max_tokens: 4096
+
+# --- 嵌入模型配置 ---
+embedding:
+  provider: "huggingface"
+  model: "sentence-transformers/all-MiniLM-L6-v2"
+  dimension: 384
+
+# --- Neo4j 图数据库配置 ---
+neo4j:
+  uri: "bolt://neo4j:7687"
+  username: "neo4j"
+  password: "${NEO4J_PASSWORD}"
+  database: "neo4j"
+
+# --- Chroma 向量数据库配置 ---
+chroma:
+  host: "chroma"
+  port: 8000
+  collection_name: "iris_code"
+  persist_directory: "./data/chroma"
+
+# --- Git 配置 ---
+git:
+  clone_directory: "./data/repos"
+  platforms:
+    gitcode:
+      base_url: "https://gitcode.com"
+      api_token: "${GITCODE_TOKEN}"
+    github:
+      base_url: "https://api.github.com"
+      api_token: "${GITHUB_TOKEN}"
+
+# --- Agent 配置 ---
+agent:
+  max_reflections: 3
+  max_tool_calls: 10
+  vector_top_k: 10
+  graph_max_depth: 3
+  response_language: "zh-CN"
+
+# --- 代码解析配置 ---
+parser:
+  supported_languages:
+    - python
+    - javascript
+    - typescript
+    - java
+    - go
+    - rust
+  max_file_size_kb: 500
+  ignore_patterns:
+    - "node_modules/"
+    - ".git/"
+    - "__pycache__/"
+    - "*.min.js"
+    - "*.lock"
+    - "dist/"
+    - "build/"
+
+# --- 模块优先级默认配置 ---
+priority:
+  default: "medium"
+  chunk_sizes:
+    high: 100
+    medium: 300
+    low: 1000
+  summary_layers:
+    high: 4
+    medium: 3
+    low: 2
+
+# --- Webhook 配置 ---
+webhook:
+  secret: "${WEBHOOK_SECRET}"
+  events:
+    - "merge_request"
+    - "pull_request"

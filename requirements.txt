@@ -1,0 +1,47 @@
+# ============================================================
+# Iris - 私有化智能代码讲解与知识库系统
+# Python 依赖清单
+# ============================================================
+
+# --- Web 框架 ---
+fastapi
+uvicorn[standard]
+
+# --- Agent 编排（LangGraph）---
+langgraph
+langchain-core
+langchain-anthropic
+langchain-openai
+langchain-community
+
+# --- RAG 引擎（LlamaIndex）---
+llama-index-core
+llama-index-graph-stores-neo4j
+llama-index-llms-anthropic
+llama-index-embeddings-huggingface
+
+# --- 向量数据库 ---
+chromadb
+
+# --- 图数据库 ---
+neo4j
+
+# --- Git 操作 ---
+gitpython
+
+# --- 代码解析 ---
+tree-sitter
+tree-sitter-languages
+
+# --- 嵌入模型（本地） ---
+sentence-transformers
+
+# --- 配置与环境 ---
+pyyaml
+python-dotenv
+
+# --- HTTP 客户端 ---
+httpx
+
+# --- 工具 ---
+pydantic

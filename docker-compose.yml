@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+  # ---- Iris 主服务 ----
+  iris:
+    build: .
+    container_name: iris-app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./config.yaml:/app/config.yaml:ro
+    env_file:
+      - .env
+    depends_on:
+      neo4j:
+        condition: service_healthy
+      chroma:
+        condition: service_started
+    restart: unless-stopped
+
+  # ---- Neo4j 图数据库 ----
+  neo4j:
+    image: neo4j:5-community
+    container_name: iris-neo4j
+    ports:
+      - "7474:7474"   # Web UI
+      - "7687:7687"   # Bolt 协议
+    environment:
+      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD}
+      - NEO4J_PLUGINS=["apoc"]
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ---- Chroma 向量数据库 ----
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: iris-chroma
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    restart: unless-stopped
+
+volumes:
+  neo4j_data:
+  neo4j_logs:
+  chroma_data:
